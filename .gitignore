@@ -1,0 +1,7 @@
+.venv/
+llama.cpp/
+data/
+runs/
+.server.pid
+__pycache__/
+*.gguf

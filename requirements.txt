@@ -1,0 +1,12 @@
+# PyTorch with CUDA is installed separately by scripts/setup.sh (index-url per CUDA version).
+transformers>=4.56,<6
+accelerate
+safetensors
+sentencepiece
+tokenizers
+huggingface_hub[cli]>=0.34
+hf_xet
+numpy
+jinja2
+pyyaml
+tqdm
