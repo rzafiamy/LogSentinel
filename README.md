@@ -23,7 +23,7 @@ Base model: [Qwen/Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B), full fine
 |---|---|---|
 | GPU | NVIDIA with **bf16** support (RTX 30xx / A-series or newer) and **16 GB VRAM** | RTX 4090 24 GB |
 | Training memory | peak ~12.7 GB | |
-| Disk | ~15 GB (datasets ~1 GB, checkpoints, GGUF files) | |
+| Disk | ~40 GB: Python env 7 GB, llama.cpp 1 GB, data 1 GB, per stage 9 GB (resume checkpoint 6.7 GB + final weights 2.3 GB), GGUF 2 GB | |
 | Software | Linux, NVIDIA driver, CUDA toolkit (`nvcc`), Python 3.10+, git, cmake, g++ | Ubuntu 24.04, driver 570, CUDA 12.8, Python 3.12 |
 
 Training time on an RTX 4090 (about 11–12k tokens/s): stage 1 ≈ 15 min, stage 2 ≈ 4 h 30, stage 3 ≈ 1 h 45.
@@ -80,7 +80,7 @@ Common settings:
 - cosine schedule with a 10% floor; gradient clipping at 1.0
 - gradient checkpointing; loss on the assistant answer only
 
-Checkpoints are written every 250 steps. **If training is interrupted, run the same command again** and it resumes from the last checkpoint.
+Checkpoints are written every 250 steps. Only the latest is kept. Once a stage has finished, you can delete its `runs/stageN/ckpt-*` folder to free 6.7 GB. **If training is interrupted, run the same command again** and it resumes from the last checkpoint.
 Progress is printed and logged to `runs/stageN/train.log`, for example:
 
 ```
