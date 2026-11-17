@@ -147,12 +147,12 @@ The baseline is the untrained Qwen3-0.6B with the full output schema and categor
 
 ## Training
 
-- **Data:** about 60k synthetic samples from a purpose-built log generator with **exact, programmatic ground truth** (no LLM-written labels). Each sample mixes realistic
+- **Data:** {"about 60k synthetic samples for the main stage plus 24k for refinement" if THREE else "about 60k synthetic samples"} from a purpose-built log generator with **exact, programmatic ground truth** (no LLM-written labels). Each sample mixes realistic
   benign traffic with 0–3 injected incidents. It includes hard negatives: admin typos, ssh-agent "too many authentication failures", late QUIC/TLS reply packets blocked by UFW,
   multicast/broadcast noise, scary-looking but standard Debian cron jobs, benign search queries containing SQL keywords, and app logs with ANSI codes or JSON.
   Multi-stage attack chains are included (port scan → brute force → login → sudo → cron persistence).
   Tasks: 62% full JSON analysis, 38% extraction Q&A. 75% English and 25% French prompts.
-- **Recipe:** full fine-tune in bf16 autocast over fp32 master weights, AdamW, lr 2.5e-5 cosine, ~16 sequences per step, sequences up to 8k tokens, loss on answer tokens only.
+- **Recipe:** full fine-tune in bf16 autocast over fp32 master weights, AdamW, cosine LR (2.5e-5 main stage{", 1e-5 refinement" if THREE else ""}), ~16 sequences per step, sequences up to 8k tokens, loss on answer tokens only.
   Trained on one RTX 4090 in {STAGES}.
 - **Reproduce:** all code, the exact datasets and a step-by-step procedure are public: [{GITHUB.split("github.com/")[1]}]({GITHUB}) on GitHub,
   dataset [rleo/LogSentinel-synthetic-logs](https://huggingface.co/datasets/rleo/LogSentinel-synthetic-logs).
